@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>贺贺的学习笔记 · 以教为学</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-body: #0f1217;
+            --bg-card: #1a1f2a;
+            --text-primary: #eef2ff;
+            --text-secondary: #a3b3d0;
+            --text-muted: #7e8aa8;
+            --border-light: #2a2f3a;
+            --border-dashed: #2a2f3a;
+            --tag-bg: #252b36;
+            --tag-border: #323a48;
+            --btn-bg: #1e2430;
+            --btn-border: #2c3442;
+            --btn-hover-bg: #2a313e;
+            --btn-hover-border: #3e4658;
+            --icon-bg: #252b36;
+            --accent: #8d9fcf;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 32px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            padding: 2rem 1.8rem;
+            transition: box-shadow 0.2s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        @media (min-width: 640px) {
+            .card {
+                padding: 2.8rem 2.5rem;
+            }
+        }
+
+        /* 头像区域 */
+        .avatar-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.8rem;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            background-color: var(--tag-bg);
+        }
+
+        .icon-marker {
+            width: 40px;
+            height: 40px;
+            background: var(--icon-bg);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.8rem;
+            border: 1px solid var(--tag-border);
+        }
+
+        .icon-marker svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--text-secondary);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .about-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--accent);
+            padding-left: 12px;
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            font-weight: 420;
+            line-height: 1.4;
+            color: var(--text-primary);
+            background: transparent;
+            padding: 0.5rem 0rem 0.5rem 0;
+            letter-spacing: -0.01em;
+        }
+
+        @media (min-width: 640px) {
+            .quote-text {
+                font-size: 1.8rem;
+            }
+        }
+
+        .quote-sub {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            border-left: 2px solid var(--border-light);
+            padding-left: 1rem;
+        }
+
+        .identity-row {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px dashed var(--border-dashed);
+            padding-top: 1rem;
+        }
+
+        .identity-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--tag-bg);
+            padding: 0.2rem 0.7rem;
+            border-radius: 24px;
+            letter-spacing: 0.2px;
+            font-weight: 440;
+            border: 1px solid var(--tag-border);
+            color: var(--text-secondary);
+        }
+
+        .plain-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: transparent;
+            padding: 0.2rem 0.2rem;
+        }
+
+        .links-section {
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-light);
+            padding-top: 1.8rem;
+        }
+
+        .links-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--btn-bg);
+            border: 1px solid var(--btn-border);
+            border-radius: 60px;
+            padding: 0.7rem 1.5rem 0.7rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 470;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .link-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-secondary);
+            stroke-width: 1.6;
+            fill: none;
+        }
+
+        .link-btn:hover {
+            background: var(--btn-hover-bg);
+            border-color: var(--btn-hover-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+        }
+
+        .small-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 1.8rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <!-- 熊猫福宝头像（维基共享资源，公开图片） -->
+        <div class="avatar-wrapper">
+            <img class="avatar" 
+                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Fubao_%28Ai_Bao%29_at_Everland_South_Korea_%282%29.jpg/400px-Fubao_%28Ai_Bao%29_at_Everland_South_Korea_%282%29.jpg" 
+                 alt="熊猫福宝头像"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Ccircle fill=\'%23252b36\' cx=\'50\' cy=\'50\' r=\'50\'/%3E%3Ctext x=\'50\' y=\'67\' font-size=\'40\' text-anchor=\'middle\' fill=\'%238d9fcf\'%3E🐼%3C/text%3E%3C/svg%3E'">
+        </div>
+
+        <!-- 小鸟装饰图标 -->
+        <div class="icon-marker" aria-hidden="true">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v1M12 8v1M5 12h14M8 5l-2 2M16 5l2 2M8 19l-2-2M16 19l2-2M12 20v1" />
+                <circle cx="12" cy="12" r="9" />
+            </svg>
+        </div>
+
+        <!-- 关于我区域 -->
+        <div class="about-section">
+            <div class="section-label">关于我</div>
+            <div class="quote-text">“一只IT小小鸟，边学边记，与你共成长”</div>
+            <div class="quote-sub">
+                以教为学 · 网络工程之路 · 真诚分享
+            </div>
+
+            <div class="identity-row">
+                <span class="identity-tag">🚩 马家堡子第二生产队</span>
+                <span class="identity-tag">📖 彪学研究者</span>
+                <span class="plain-info">👤 姓名：张贺贺</span>
+                <span class="plain-info">📅 生产日期：1997年</span>
+                <span class="identity-tag">🐼 熊猫福宝狂热粉丝</span>
+                <span style="font-size:0.72rem; color:#7e8aa8; margin-left: 0.2rem;">| 勤耕不辍，知行合一</span>
+            </div>
+        </div>
+
+        <!-- 链接区 -->
+        <div class="links-section">
+            <div class="links-title">
+                <span>◈ 驻足交流</span>
+            </div>
+            <div class="links-grid">
+                <a href="https://space.bilibili.com/483848006" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M4.5 7.5L6 9L7.5 7.5M16.5 7.5L18 9L19.5 7.5M3 12h18M4 18h16a1 0 0 0 1-1V9a1 0 0 0-1-1H4a1 0 0 0-1 1v8a1 0 0 0 1 1Z" />
+                        <path d="M8 14v2M16 14v2" />
+                    </svg>
+                    B站 · 是贺贺呀
+                </a>
+                <a href="https://www.cnblogs.com/yizhangheka" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" />
+                        <circle cx="16.5" cy="16.5" r="1.5" />
+                    </svg>
+                    博客园 · 张贺贺呀
+                </a>
+            </div>
+        </div>
+
+        <div class="small-note">
+            ʰᵉˡˡᵒ ᵗᵉᶜʰ ⁿᵒᵗᵉˢ ✦ 日拱一卒，功不唐捐
+        </div>
+    </div>
+    <div class="footer-note">
+        学习 · 记录 · 同行
+    </div>
+</div>
+</body>
+</html>
