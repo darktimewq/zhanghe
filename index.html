@@ -11,186 +11,233 @@
             box-sizing: border-box;
         }
 
+        /* 深色主题（默认黑夜）变量 */
         :root {
-            --bg-body: #0f1217;
-            --bg-card: #1a1f2a;
-            --text-primary: #eef2ff;
-            --text-secondary: #a3b3d0;
-            --text-muted: #7e8aa8;
-            --border-light: #2a2f3a;
+            --bg-body-start: #0a0c12;
+            --bg-body-end: #11161f;
+            --bg-card: rgba(20, 26, 36, 0.85);
+            --card-border: rgba(56, 68, 88, 0.4);
+            --card-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+            --text-primary: #f1f5f9;
+            --text-secondary: #b9c7da;
+            --text-muted: #7b8a9e;
+            --border-light: #2d3440;
             --border-dashed: #2a2f3a;
-            --tag-bg: #252b36;
-            --tag-border: #323a48;
-            --btn-bg: #1e2430;
-            --btn-border: #2c3442;
-            --btn-hover-bg: #2a313e;
-            --btn-hover-border: #3e4658;
-            --icon-bg: #252b36;
-            --accent: #8d9fcf;
+            --btn-bg: rgba(30, 36, 48, 0.9);
+            --btn-border: #334155;
+            --btn-hover-bg: #2d3a4e;
+            --btn-hover-border: #5b6e8c;
+            --accent: #9bb5e6;
+            --accent-glow: rgba(155, 181, 230, 0.2);
+            --gradient-accent: linear-gradient(135deg, #9bb5e6 0%, #7c93c0 100%);
+            --transition-smooth: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        /* 白天模式 */
+        [data-theme="light"] {
+            --bg-body-start: #eef2f8;
+            --bg-body-end: #dfe6ef;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --card-border: rgba(148, 163, 184, 0.25);
+            --card-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08);
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #5b6e8c;
+            --border-light: #e2e8f0;
+            --border-dashed: #cbd5e1;
+            --btn-bg: #ffffff;
+            --btn-border: #cfdee9;
+            --btn-hover-bg: #eef3fc;
+            --btn-hover-border: #a0b3cc;
+            --accent: #3b71f0;
+            --accent-glow: rgba(59, 113, 240, 0.15);
+            --gradient-accent: linear-gradient(135deg, #3b71f0, #5b8cff);
         }
 
         body {
-            background-color: var(--bg-body);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-body-start), var(--bg-body-end));
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Text', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.5;
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 1.5rem;
+            transition: background 0.3s ease;
+            position: relative;
         }
 
+        /* 背景柔光噪点纹理 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 25% 40%, rgba(255,255,240,0.02) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 右上角主题切换按钮 */
+        .theme-switch-wrapper {
+            position: fixed;
+            top: 1.2rem;
+            right: 1.4rem;
+            z-index: 100;
+        }
+
+        .theme-btn {
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.05);
+            background: var(--btn-hover-bg);
+            border-color: var(--accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--text-secondary);
+            stroke-width: 1.7;
+            fill: none;
+            transition: stroke 0.2s;
+        }
+
+        [data-theme="light"] .theme-btn .sun-icon,
+        .theme-btn .moon-icon { display: none; }
+        [data-theme="light"] .theme-btn .moon-icon { display: block; }
+        [data-theme="dark"] .theme-btn .sun-icon { display: block; }
+        .theme-btn .sun-icon { display: block; }
+        .theme-btn .moon-icon { display: none; }
+        [data-theme="light"] .theme-btn .sun-icon { display: none; }
+        [data-theme="light"] .theme-btn .moon-icon { display: block; }
+
         .container {
-            max-width: 720px;
+            max-width: 740px;
             width: 100%;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .card {
             background: var(--bg-card);
-            border-radius: 32px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            border-radius: 40px;
+            box-shadow: var(--card-shadow);
             padding: 2rem 1.8rem;
-            transition: box-shadow 0.2s ease;
-            border: 1px solid var(--border-light);
+            transition: var(--transition-smooth);
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 40px;
+            padding: 1px;
+            background: linear-gradient(125deg, var(--accent-glow), transparent 70%);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.5;
         }
 
         @media (min-width: 640px) {
             .card {
-                padding: 2.8rem 2.5rem;
+                padding: 2.8rem 2.6rem;
             }
         }
 
-        /* 头像区域 */
+        /* 头像区域 - 朴素沙漏，无阴影 */
         .avatar-wrapper {
             display: flex;
             justify-content: center;
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.6rem;
         }
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 108px;
+            height: 108px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            background-color: var(--tag-bg);
-        }
-
-        .icon-marker {
-            width: 40px;
-            height: 40px;
-            background: var(--icon-bg);
-            border-radius: 20px;
-            display: inline-flex;
+            border: 2px solid var(--accent);
+            background: var(--bg-card);
+            display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.8rem;
-            border: 1px solid var(--tag-border);
+            transition: transform 0.2s ease;
         }
-
-        .icon-marker svg {
-            width: 22px;
-            height: 22px;
-            stroke: var(--text-secondary);
-            stroke-width: 1.5;
+        .avatar svg {
+            width: 68%;
+            height: 68%;
+            stroke: var(--accent);
+            stroke-width: 1.8;
             fill: none;
         }
-
-        .about-section {
-            margin-bottom: 2.5rem;
+        .avatar:hover {
+            transform: scale(1.02);
         }
 
-        .section-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            border-left: 3px solid var(--accent);
-            padding-left: 12px;
+        /* 主引语区域 - 居中，无引号 */
+        .quote-wrapper {
+            margin-bottom: 2rem;
+            text-align: center;
         }
-
         .quote-text {
-            font-size: 1.5rem;
-            font-weight: 420;
-            line-height: 1.4;
+            font-size: 1.65rem;
+            font-weight: 480;
+            line-height: 1.35;
+            letter-spacing: -0.3px;
             color: var(--text-primary);
             background: transparent;
-            padding: 0.5rem 0rem 0.5rem 0;
-            letter-spacing: -0.01em;
+            padding: 0;
+            transition: color 0.2s;
+            display: inline-block;
         }
-
         @media (min-width: 640px) {
             .quote-text {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
         }
 
-        .quote-sub {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-            border-left: 2px solid var(--border-light);
-            padding-left: 1rem;
+        /* 分割线 */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border-light);
+            margin: 1.2rem 0 1.5rem 0;
+            opacity: 0.6;
         }
 
-        .identity-row {
-            margin-top: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: baseline;
-            gap: 0.75rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            border-top: 1px dashed var(--border-dashed);
-            padding-top: 1rem;
-        }
-
-        .identity-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--tag-bg);
-            padding: 0.2rem 0.7rem;
-            border-radius: 24px;
-            letter-spacing: 0.2px;
-            font-weight: 440;
-            border: 1px solid var(--tag-border);
-            color: var(--text-secondary);
-        }
-
-        .plain-info {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            background: transparent;
-            padding: 0.2rem 0.2rem;
-        }
-
+        /* 链接区域 - 居中显示 */
         .links-section {
-            margin-top: 2rem;
-            border-top: 1px solid var(--border-light);
-            padding-top: 1.8rem;
+            padding-bottom: 0.5rem;
         }
-
-        .links-title {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
         .links-grid {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 1rem;
         }
 
@@ -201,113 +248,187 @@
             background: var(--btn-bg);
             border: 1px solid var(--btn-border);
             border-radius: 60px;
-            padding: 0.7rem 1.5rem 0.7rem 1.2rem;
+            padding: 0.65rem 1.5rem 0.65rem 1.3rem;
             font-size: 0.95rem;
-            font-weight: 470;
+            font-weight: 500;
             color: var(--text-primary);
             text-decoration: none;
-            transition: all 0.2s;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(2px);
+            letter-spacing: -0.2px;
         }
 
         .link-btn svg {
             width: 20px;
             height: 20px;
-            stroke: var(--text-secondary);
-            stroke-width: 1.6;
+            stroke: var(--accent);
+            stroke-width: 1.7;
             fill: none;
+            transition: stroke 0.2s, transform 0.2s;
         }
 
         .link-btn:hover {
             background: var(--btn-hover-bg);
-            border-color: var(--btn-hover-border);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            color: white;
-            transform: translateY(-1px);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.2);
+        }
+        .link-btn:hover svg {
+            stroke: var(--accent);
+            transform: scale(1.02);
         }
 
         .footer-note {
             margin-top: 2rem;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
             color: var(--text-muted);
-            letter-spacing: 0.3px;
+            font-weight: 430;
+            transition: color 0.2s;
         }
 
-        .small-note {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 1.8rem;
-            text-align: center;
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body-start);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 8px;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1.6rem;
+            }
+            .quote-text {
+                font-size: 1.4rem;
+            }
+            .link-btn {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="card">
-        <!-- 熊猫福宝头像（维基共享资源，公开图片） -->
-        <div class="avatar-wrapper">
-            <img class="avatar" 
-                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Fubao_%28Ai_Bao%29_at_Everland_South_Korea_%282%29.jpg/400px-Fubao_%28Ai_Bao%29_at_Everland_South_Korea_%282%29.jpg" 
-                 alt="熊猫福宝头像"
-                 onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Ccircle fill=\'%23252b36\' cx=\'50\' cy=\'50\' r=\'50\'/%3E%3Ctext x=\'50\' y=\'67\' font-size=\'40\' text-anchor=\'middle\' fill=\'%238d9fcf\'%3E🐼%3C/text%3E%3C/svg%3E'">
-        </div>
-
-        <!-- 小鸟装饰图标 -->
-        <div class="icon-marker" aria-hidden="true">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3v1M12 8v1M5 12h14M8 5l-2 2M16 5l2 2M8 19l-2-2M16 19l2-2M12 20v1" />
-                <circle cx="12" cy="12" r="9" />
+    <!-- 右上角主题切换 -->
+    <div class="theme-switch-wrapper">
+        <div class="theme-btn" id="theme-toggle" aria-label="切换白天/黑夜模式">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
         </div>
+    </div>
 
-        <!-- 关于我区域 -->
-        <div class="about-section">
-            <div class="section-label">关于我</div>
-            <div class="quote-text">“一只IT小小鸟，边学边记，与你共成长”</div>
-            <div class="quote-sub">
-                以教为学 · 网络工程之路 · 真诚分享
+    <div class="container">
+        <div class="card">
+            <!-- 朴素沙漏头像 -->
+            <div class="avatar-wrapper">
+                <div class="avatar">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="20" width="40" height="60" rx="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M35 25 L65 25 L50 48 Z" fill="currentColor" opacity="0.3" stroke="none"/>
+                        <path d="M35 75 L65 75 L50 52 Z" fill="currentColor" opacity="0.6" stroke="none"/>
+                        <line x1="28" y1="20" x2="72" y2="20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="28" y1="80" x2="72" y2="80" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="50" y1="48" x2="50" y2="52" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.7"/>
+                        <circle cx="30" cy="25" r="2" fill="currentColor"/>
+                        <circle cx="70" cy="25" r="2" fill="currentColor"/>
+                        <circle cx="30" cy="75" r="2" fill="currentColor"/>
+                        <circle cx="70" cy="75" r="2" fill="currentColor"/>
+                    </svg>
+                </div>
             </div>
 
-            <div class="identity-row">
-                <span class="identity-tag">🚩 马家堡子第二生产队</span>
-                <span class="identity-tag">📖 彪学研究者</span>
-                <span class="plain-info">👤 姓名：张贺贺</span>
-                <span class="plain-info">📅 生产日期：1997年</span>
-                <span class="identity-tag">🐼 熊猫福宝狂热粉丝</span>
-                <span style="font-size:0.72rem; color:#7e8aa8; margin-left: 0.2rem;">| 勤耕不辍，知行合一</span>
+            <!-- 引语 -->
+            <div class="quote-wrapper">
+                <div class="quote-text">你好 我是贺贺呀</div>
+            </div>
+
+            <!-- 分割线 -->
+            <div class="divider"></div>
+
+            <!-- 链接区：居中显示 -->
+            <div class="links-section">
+                <div class="links-grid">
+                    <a href="https://darktimewq.github.io/zhanghe/" class="link-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M3 9.5L12 3L21 9.5M5 11.5V20H19V11.5M9 20V14H15V20" />
+                            <path d="M12 13L12 10" />
+                        </svg>
+                        Home
+                    </a>
+                    <a href="https://github.com/darktimewq" class="link-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                        </svg>
+                        Github
+                    </a>
+                    <a href="https://space.bilibili.com/483848006" class="link-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M4.5 7.5L6 9L7.5 7.5M16.5 7.5L18 9L19.5 7.5M3 12h18M4 18h16a1 0 0 0 1-1V9a1 0 0 0-1-1H4a1 0 0 0-1 1v8a1 0 0 0 1 1Z" />
+                            <path d="M8 14v2M16 14v2" />
+                        </svg>
+                        Bilibil
+                    </a>
+                    <a href="https://www.cnblogs.com/yizhangheka" class="link-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" />
+                            <circle cx="16.5" cy="16.5" r="1.5" />
+                        </svg>
+                        Blog
+                    </a>
+                </div>
             </div>
         </div>
-
-        <!-- 链接区 -->
-        <div class="links-section">
-            <div class="links-title">
-                <span>◈ 驻足交流</span>
-            </div>
-            <div class="links-grid">
-                <a href="https://space.bilibili.com/483848006" class="link-btn" target="_blank" rel="noopener noreferrer">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M4.5 7.5L6 9L7.5 7.5M16.5 7.5L18 9L19.5 7.5M3 12h18M4 18h16a1 0 0 0 1-1V9a1 0 0 0-1-1H4a1 0 0 0-1 1v8a1 0 0 0 1 1Z" />
-                        <path d="M8 14v2M16 14v2" />
-                    </svg>
-                    B站 · 是贺贺呀
-                </a>
-                <a href="https://www.cnblogs.com/yizhangheka" class="link-btn" target="_blank" rel="noopener noreferrer">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" />
-                        <circle cx="16.5" cy="16.5" r="1.5" />
-                    </svg>
-                    博客园 · 张贺贺呀
-                </a>
-            </div>
-        </div>
-
-        <div class="small-note">
-            ʰᵉˡˡᵒ ᵗᵉᶜʰ ⁿᵒᵗᵉˢ ✦ 日拱一卒，功不唐捐
+        <div class="footer-note">
+            学习 · 记录 · 同行
         </div>
     </div>
-    <div class="footer-note">
-        学习 · 记录 · 同行
-    </div>
-</div>
+
+    <script>
+        (function() {
+            const root = document.documentElement;
+            let currentTheme = localStorage.getItem('theme') || 'dark';
+            function setTheme(theme) {
+                if (theme === 'light') {
+                    root.setAttribute('data-theme', 'light');
+                } else {
+                    root.setAttribute('data-theme', 'dark');
+                }
+                localStorage.setItem('theme', theme);
+                currentTheme = theme;
+            }
+            if (currentTheme === 'light') {
+                setTheme('light');
+            } else {
+                setTheme('dark');
+            }
+            const toggleBtn = document.getElementById('theme-toggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    setTheme(newTheme);
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
