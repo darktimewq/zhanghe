@@ -1,434 +1,590 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>ZhangHe</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="贺贺的个人主页">
+  <meta name="theme-color" content="#070914">
+  <title>ZhangHe · 贺贺</title>
 
-        /* 深色主题（默认黑夜）变量 */
-        :root {
-            --bg-body-start: #0a0c12;
-            --bg-body-end: #11161f;
-            --bg-card: rgba(20, 26, 36, 0.85);
-            --card-border: rgba(56, 68, 88, 0.4);
-            --card-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
-            --text-primary: #f1f5f9;
-            --text-secondary: #b9c7da;
-            --text-muted: #7b8a9e;
-            --border-light: #2d3440;
-            --border-dashed: #2a2f3a;
-            --btn-bg: rgba(30, 36, 48, 0.9);
-            --btn-border: #334155;
-            --btn-hover-bg: #2d3a4e;
-            --btn-hover-border: #5b6e8c;
-            --accent: #9bb5e6;
-            --accent-glow: rgba(155, 181, 230, 0.2);
-            --gradient-accent: linear-gradient(135deg, #9bb5e6 0%, #7c93c0 100%);
-            --transition-smooth: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        /* 白天模式 */
-        [data-theme="light"] {
-            --bg-body-start: #eef2f8;
-            --bg-body-end: #dfe6ef;
-            --bg-card: rgba(255, 255, 255, 0.92);
-            --card-border: rgba(148, 163, 184, 0.25);
-            --card-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08);
-            --text-primary: #0f172a;
-            --text-secondary: #334155;
-            --text-muted: #5b6e8c;
-            --border-light: #e2e8f0;
-            --border-dashed: #cbd5e1;
-            --btn-bg: #ffffff;
-            --btn-border: #cfdee9;
-            --btn-hover-bg: #eef3fc;
-            --btn-hover-border: #a0b3cc;
-            --accent: #3b71f0;
-            --accent-glow: rgba(59, 113, 240, 0.15);
-            --gradient-accent: linear-gradient(135deg, #3b71f0, #5b8cff);
-        }
+    :root {
+      color-scheme: dark;
+      --bg: #070914;
+      --panel: rgba(14, 18, 36, 0.72);
+      --tile: rgba(255, 255, 255, 0.045);
+      --tile-hover: rgba(255, 255, 255, 0.09);
+      --text: #f7f8ff;
+      --muted: #919bb7;
+      --line: rgba(159, 181, 255, 0.16);
+      --purple: #8b5cf6;
+      --cyan: #22d3ee;
+      --pink: #ec4899;
+      --shadow: 0 35px 100px rgba(0, 0, 0, 0.5);
+    }
 
-        body {
-            background: linear-gradient(135deg, var(--bg-body-start), var(--bg-body-end));
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Text', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.5;
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            transition: background 0.3s ease;
-            position: relative;
-        }
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #eef2ff;
+      --panel: rgba(255, 255, 255, 0.7);
+      --tile: rgba(255, 255, 255, 0.5);
+      --tile-hover: rgba(255, 255, 255, 0.95);
+      --text: #12152a;
+      --muted: #606982;
+      --line: rgba(70, 63, 140, 0.14);
+      --shadow: 0 30px 80px rgba(68, 54, 130, 0.18);
+    }
 
-        /* 背景柔光噪点纹理 */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle at 25% 40%, rgba(255,255,240,0.02) 1px, transparent 1px);
-            background-size: 24px 24px;
-            pointer-events: none;
-            z-index: 0;
-        }
+    html {
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
 
-        /* 右上角主题切换按钮 */
-        .theme-switch-wrapper {
-            position: fixed;
-            top: 1.2rem;
-            right: 1.4rem;
-            z-index: 100;
-        }
+    body {
+      min-height: 100svh;
+      overflow-x: hidden;
+      color: var(--text);
+      background: var(--bg);
+      transition: background 0.45s, color 0.45s;
+    }
 
-        .theme-btn {
-            background: var(--bg-card);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--card-border);
-            border-radius: 50px;
-            width: 46px;
-            height: 46px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-        }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -5;
+      background:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle, #000, transparent 78%);
+    }
 
-        .theme-btn:hover {
-            transform: scale(1.05);
-            background: var(--btn-hover-bg);
-            border-color: var(--accent);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      width: 100%;
+      height: 100%;
+    }
 
-        .theme-btn svg {
-            width: 22px;
-            height: 22px;
-            stroke: var(--text-secondary);
-            stroke-width: 1.7;
-            fill: none;
-            transition: stroke 0.2s;
-        }
+    .orb {
+      position: fixed;
+      z-index: -4;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.24;
+      animation: float 12s ease-in-out infinite alternate;
+    }
 
-        [data-theme="light"] .theme-btn .sun-icon,
-        .theme-btn .moon-icon { display: none; }
-        [data-theme="light"] .theme-btn .moon-icon { display: block; }
-        [data-theme="dark"] .theme-btn .sun-icon { display: block; }
-        .theme-btn .sun-icon { display: block; }
-        .theme-btn .moon-icon { display: none; }
-        [data-theme="light"] .theme-btn .sun-icon { display: none; }
-        [data-theme="light"] .theme-btn .moon-icon { display: block; }
+    .orb-a {
+      left: -180px;
+      top: -220px;
+      background: var(--purple);
+    }
 
-        .container {
-            max-width: 740px;
-            width: 100%;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
+    .orb-b {
+      right: -170px;
+      bottom: -230px;
+      background: var(--cyan);
+      animation-delay: -5s;
+    }
 
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(2px);
-            border-radius: 40px;
-            box-shadow: var(--card-shadow);
-            padding: 2rem 1.8rem;
-            transition: var(--transition-smooth);
-            border: 1px solid var(--card-border);
-            position: relative;
-            overflow: hidden;
-        }
+    .pointer-glow {
+      position: fixed;
+      z-index: -2;
+      width: 430px;
+      height: 430px;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(85,153,255,.13), transparent 68%);
+    }
 
-        .card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 40px;
-            padding: 1px;
-            background: linear-gradient(125deg, var(--accent-glow), transparent 70%);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0.5;
-        }
+    .theme-button {
+      position: fixed;
+      top: 24px;
+      right: 26px;
+      z-index: 20;
+      width: 50px;
+      height: 50px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--text);
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      cursor: pointer;
+      font-size: 21px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
+      transition: 0.25s;
+    }
 
-        @media (min-width: 640px) {
-            .card {
-                padding: 2.8rem 2.6rem;
-            }
-        }
+    .theme-button:hover {
+      transform: rotate(12deg) scale(1.07);
+      border-color: var(--cyan);
+    }
 
-        /* 头像区域 - 朴素沙漏，无阴影 */
-        .avatar-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1.6rem;
-        }
-        .avatar {
-            width: 108px;
-            height: 108px;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-            background: var(--bg-card);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease;
-        }
-        .avatar svg {
-            width: 68%;
-            height: 68%;
-            stroke: var(--accent);
-            stroke-width: 1.8;
-            fill: none;
-        }
-        .avatar:hover {
-            transform: scale(1.02);
-        }
+    main {
+      min-height: 100svh;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      gap: 25px;
+      padding: 85px 24px 30px;
+    }
 
-        /* 主引语区域 - 居中，无引号 */
-        .quote-wrapper {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .quote-text {
-            font-size: 1.65rem;
-            font-weight: 480;
-            line-height: 1.35;
-            letter-spacing: -0.3px;
-            color: var(--text-primary);
-            background: transparent;
-            padding: 0;
-            transition: color 0.2s;
-            display: inline-block;
-        }
-        @media (min-width: 640px) {
-            .quote-text {
-                font-size: 2rem;
-            }
-        }
+    .panel {
+      position: relative;
+      width: min(920px, calc(100vw - 48px));
+      padding: 48px 54px;
+      overflow: hidden;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.07), transparent 30%),
+        var(--panel);
+      backdrop-filter: blur(30px) saturate(135%);
+      box-shadow: var(--shadow);
+      animation: reveal .8s cubic-bezier(.16,1,.3,1);
+    }
 
-        /* 分割线 */
-        .divider {
-            width: 100%;
-            height: 1px;
-            background: var(--border-light);
-            margin: 1.2rem 0 1.5rem 0;
-            opacity: 0.6;
-        }
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(
+        125deg,
+        rgba(139,92,246,.8),
+        transparent 27%,
+        transparent 72%,
+        rgba(34,211,238,.7)
+      );
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+    }
 
-        /* 链接区域 - 居中显示 */
-        .links-section {
-            padding-bottom: 0.5rem;
-        }
-        .links-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
+    .eyebrow {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .22em;
+    }
 
-        .link-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--btn-bg);
-            border: 1px solid var(--btn-border);
-            border-radius: 60px;
-            padding: 0.65rem 1.5rem 0.65rem 1.3rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            backdrop-filter: blur(2px);
-            letter-spacing: -0.2px;
-        }
+    .eyebrow i {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-right: 9px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 14px var(--cyan);
+      animation: pulse 2s infinite;
+    }
 
-        .link-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--accent);
-            stroke-width: 1.7;
-            fill: none;
-            transition: stroke 0.2s, transform 0.2s;
-        }
+    .avatar {
+      position: relative;
+      width: 112px;
+      height: 112px;
+      margin: 25px auto 22px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(139,92,246,.42);
+      border-radius: 50%;
+      animation: spin 10s linear infinite;
+    }
 
-        .link-btn:hover {
-            background: var(--btn-hover-bg);
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.2);
-        }
-        .link-btn:hover svg {
-            stroke: var(--accent);
-            transform: scale(1.02);
-        }
+    .avatar::after {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 9px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 16px var(--cyan);
+    }
 
-        .footer-note {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.7rem;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            font-weight: 430;
-            transition: color 0.2s;
-        }
+    .avatar-core {
+      width: 74px;
+      height: 74px;
+      display: grid;
+      place-items: center;
+      border-radius: 23px;
+      color: white;
+      font-size: 30px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--purple), var(--pink), var(--cyan));
+      box-shadow: 0 15px 45px rgba(139,92,246,.36);
+      transform: rotate(-7deg);
+      animation: counter-spin 10s linear infinite;
+    }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-body-start);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 8px;
-        }
+    .hello {
+      margin-bottom: 7px;
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .2em;
+    }
 
-        @media (max-width: 500px) {
-            body {
-                padding: 1rem;
-            }
-            .card {
-                padding: 1.6rem;
-            }
-            .quote-text {
-                font-size: 1.4rem;
-            }
-            .link-btn {
-                padding: 0.5rem 1.2rem;
-                font-size: 0.85rem;
-            }
-        }
-    </style>
+    h1 {
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.2;
+      letter-spacing: -.05em;
+    }
+
+    h1 span {
+      color: transparent;
+      background: linear-gradient(90deg, #a78bfa, #f472b6, var(--cyan));
+      background-size: 200% auto;
+      background-clip: text;
+      animation: gradient 5s linear infinite;
+    }
+
+    .description {
+      margin: 17px auto 34px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.85;
+    }
+
+    nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+
+    nav a {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 13px;
+      color: var(--text);
+      text-align: left;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--tile);
+      opacity: 0;
+      animation: rise .6s forwards;
+      animation-delay: var(--delay);
+      transition: .25s;
+    }
+
+    nav a:hover {
+      transform: translateY(-6px);
+      background: var(--tile-hover);
+      border-color: rgba(110,155,255,.5);
+      box-shadow: 0 15px 32px rgba(0,0,0,.17);
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: #bec9ff;
+      font-size: 20px;
+      background: linear-gradient(
+        145deg,
+        rgba(139,92,246,.22),
+        rgba(34,211,238,.08)
+      );
+    }
+
+    .link-copy {
+      font-style: normal;
+    }
+
+    .link-copy strong,
+    .link-copy small {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .link-copy strong {
+      font-size: 14px;
+    }
+
+    .link-copy small {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-style: normal;
+      transition: .25s;
+    }
+
+    nav a:hover .arrow {
+      color: var(--cyan);
+      transform: translate(2px, -2px);
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .16em;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(22px) scale(.97); }
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes float {
+      to { transform: translate(80px, 50px) scale(1.15); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes counter-spin {
+      to { transform: rotate(-367deg); }
+    }
+
+    @keyframes pulse {
+      50% { opacity: .3; transform: scale(.6); }
+    }
+
+    @keyframes gradient {
+      to { background-position: 200% center; }
+    }
+
+    @media (max-width: 760px) {
+      .panel {
+        width: calc(100vw - 32px);
+        padding: 38px 22px 30px;
+        border-radius: 26px;
+      }
+
+      nav {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 430px) {
+      nav {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .theme-button {
+        top: 18px;
+        right: 18px;
+        width: 44px;
+        height: 44px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      .pointer-glow {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <!-- 右上角主题切换 -->
-    <div class="theme-switch-wrapper">
-        <div class="theme-btn" id="theme-toggle" aria-label="切换白天/黑夜模式">
-            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="5" />
-                <line x1="12" y1="1" x2="12" y2="3" />
-                <line x1="12" y1="21" x2="12" y2="23" />
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                <line x1="1" y1="12" x2="3" y2="12" />
-                <line x1="21" y1="12" x2="23" y2="12" />
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-            </svg>
-            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-        </div>
-    </div>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+  <div class="pointer-glow" aria-hidden="true"></div>
 
-    <div class="container">
-        <div class="card">
-            <!-- 朴素沙漏头像 -->
-            <div class="avatar-wrapper">
-                <div class="avatar">
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="30" y="20" width="40" height="60" rx="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                        <path d="M35 25 L65 25 L50 48 Z" fill="currentColor" opacity="0.3" stroke="none"/>
-                        <path d="M35 75 L65 75 L50 52 Z" fill="currentColor" opacity="0.6" stroke="none"/>
-                        <line x1="28" y1="20" x2="72" y2="20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="28" y1="80" x2="72" y2="80" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="50" y1="48" x2="50" y2="52" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.7"/>
-                        <circle cx="30" cy="25" r="2" fill="currentColor"/>
-                        <circle cx="70" cy="25" r="2" fill="currentColor"/>
-                        <circle cx="30" cy="75" r="2" fill="currentColor"/>
-                        <circle cx="70" cy="75" r="2" fill="currentColor"/>
-                    </svg>
-                </div>
-            </div>
+  <button id="theme-button" class="theme-button" type="button"
+          aria-label="切换白天/黑夜模式">☀</button>
 
-            <!-- 引语 -->
-            <div class="quote-wrapper">
-                <div class="quote-text">你好 我是贺贺呀</div>
-            </div>
+  <main>
+    <section class="panel">
+      <div class="eyebrow"><i></i>WELCOME TO MY SPACE</div>
 
-            <!-- 分割线 -->
-            <div class="divider"></div>
+      <div class="avatar" aria-hidden="true">
+        <div class="avatar-core">H</div>
+      </div>
 
-            <!-- 链接区：居中显示 -->
-            <div class="links-section">
-                <div class="links-grid">
-                    <a href="https://darktimewq.github.io/zhanghe/" class="link-btn" target="_blank" rel="noopener noreferrer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M3 9.5L12 3L21 9.5M5 11.5V20H19V11.5M9 20V14H15V20" />
-                            <path d="M12 13L12 10" />
-                        </svg>
-                        Home
-                    </a>
-                    <a href="https://github.com/darktimewq" class="link-btn" target="_blank" rel="noopener noreferrer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                        </svg>
-                        Github
-                    </a>
-                    <a href="https://space.bilibili.com/443654017?spm_id_from=333.1007.0.0" class="link-btn" target="_blank" rel="noopener noreferrer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M4.5 7.5L6 9L7.5 7.5M16.5 7.5L18 9L19.5 7.5M3 12h18M4 18h16a1 0 0 0 1-1V9a1 0 0 0-1-1H4a1 0 0 0-1 1v8a1 0 0 0 1 1Z" />
-                            <path d="M8 14v2M16 14v2" />
-                        </svg>
-                        Bilibil
-                    </a>
-                    <a href="https://www.cnblogs.com/yizhangheka" class="link-btn" target="_blank" rel="noopener noreferrer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" />
-                            <circle cx="16.5" cy="16.5" r="1.5" />
-                        </svg>
-                        Blog
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-note">
-            学习 · 记录 · 同行
-        </div>
-    </div>
+      <p class="hello">HELLO, WORLD!</p>
+      <h1>你好，我是<span>贺贺</span>呀</h1>
 
-    <script>
-        (function() {
-            const root = document.documentElement;
-            let currentTheme = localStorage.getItem('theme') || 'dark';
-            function setTheme(theme) {
-                if (theme === 'light') {
-                    root.setAttribute('data-theme', 'light');
-                } else {
-                    root.setAttribute('data-theme', 'dark');
-                }
-                localStorage.setItem('theme', theme);
-                currentTheme = theme;
-            }
-            if (currentTheme === 'light') {
-                setTheme('light');
-            } else {
-                setTheme('dark');
-            }
-            const toggleBtn = document.getElementById('theme-toggle');
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                    setTheme(newTheme);
-                });
-            }
-        })();
-    </script>
+      <p class="description">
+        热爱代码，也热爱生活。<br>
+        在不断探索中，记录每一次灵感闪烁。
+      </p>
+
+      <nav aria-label="个人链接">
+        <a href="./" style="--delay:.1s">
+          <b class="icon">⌂</b>
+          <em class="link-copy">
+            <strong>Home</strong>
+            <small>回到这里</small>
+          </em>
+          <i class="arrow">↗</i>
+        </a>
+
+        <a href="https://github.com/darktimewq"
+           target="_blank" rel="noopener noreferrer"
+           style="--delay:.2s">
+          <b class="icon">⌘</b>
+          <em class="link-copy">
+            <strong>Github</strong>
+            <small>代码与项目</small>
+          </em>
+          <i class="arrow">↗</i>
+        </a>
+
+        <a href="https://space.bilibili.com/443654017"
+           target="_blank" rel="noopener noreferrer"
+           style="--delay:.3s">
+          <b class="icon">▣</b>
+          <em class="link-copy">
+            <strong>Bilibili</strong>
+            <small>视频与分享</small>
+          </em>
+          <i class="arrow">↗</i>
+        </a>
+
+        <a href="https://www.cnblogs.com/yizhangheka"
+           target="_blank" rel="noopener noreferrer"
+           style="--delay:.4s">
+          <b class="icon">▤</b>
+          <em class="link-copy">
+            <strong>Blog</strong>
+            <small>思考与记录</small>
+          </em>
+          <i class="arrow">↗</i>
+        </a>
+      </nav>
+    </section>
+
+    <footer>✦　学习 · 记录 · 同行　✦</footer>
+  </main>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeButton = document.querySelector("#theme-button");
+      const glow = document.querySelector(".pointer-glow");
+      const canvas = document.querySelector("#stars");
+      const context = canvas.getContext("2d");
+
+      let theme =
+        localStorage.getItem("theme") ||
+        (matchMedia("(prefers-color-scheme: light)").matches
+          ? "light"
+          : "dark");
+
+      let stars = [];
+      let animationFrame;
+
+      function setTheme(value) {
+        theme = value;
+        root.dataset.theme = value;
+        themeButton.textContent = value === "dark" ? "☀" : "☾";
+        localStorage.setItem("theme", value);
+      }
+
+      setTheme(theme);
+
+      themeButton.addEventListener("click", () => {
+        setTheme(theme === "dark" ? "light" : "dark");
+      });
+
+      window.addEventListener("pointermove", event => {
+        glow.style.left = event.clientX + "px";
+        glow.style.top = event.clientY + "px";
+      }, { passive: true });
+
+      function resizeCanvas() {
+        const ratio = Math.min(devicePixelRatio, 2);
+
+        canvas.width = innerWidth * ratio;
+        canvas.height = innerHeight * ratio;
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+        stars = Array.from({
+          length: Math.min(85, Math.floor(innerWidth / 14))
+        }, () => ({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          radius: Math.random() + 0.2,
+          speed: Math.random() * 0.08 + 0.02,
+          opacity: Math.random() * 0.4 + 0.1
+        }));
+      }
+
+      function drawStars() {
+        context.clearRect(0, 0, innerWidth, innerHeight);
+
+        stars.forEach(star => {
+          star.y -= star.speed;
+
+          if (star.y < 0) {
+            star.y = innerHeight;
+            star.x = Math.random() * innerWidth;
+          }
+
+          context.beginPath();
+          context.fillStyle = theme === "dark"
+            ? `rgba(190,215,255,${star.opacity})`
+            : `rgba(70,60,140,${star.opacity * 0.3})`;
+
+          context.arc(
+            star.x,
+            star.y,
+            star.radius,
+            0,
+            Math.PI * 2
+          );
+
+          context.fill();
+        });
+
+        animationFrame = requestAnimationFrame(drawStars);
+      }
+
+      resizeCanvas();
+      drawStars();
+
+      window.addEventListener("resize", () => {
+        cancelAnimationFrame(animationFrame);
+        resizeCanvas();
+        drawStars();
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>
